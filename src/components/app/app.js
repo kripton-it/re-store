@@ -1,27 +1,10 @@
-import React, { Component } from "react";
-import './app.css'
-//import ErrorBoundary from "../error-boundary/error-boundary";
-//import { BookstoreServiceProvider } from "../bookstore-service-context";
+import React from "react";
+import "./app.css";
+import withBookstoreService from "../HOC";
 
-/*class App extends Component {
-  state = {
-    bookstoreService: new BookstoreService(),
-  };
-  render() {
-    const { bookstoreService } = this.state;
+const App = ({ bookstoreService }) => {
+  console.log(bookstoreService.getBooks());
+  return <div />;
+};
 
-    return (
-      <ErrorBoundary>
-        <BookstoreServiceProvider value={bookstoreService}>
-          {`hello`}
-        </BookstoreServiceProvider>
-      </ErrorBoundary>
-    );
-  }
-}*/
-
-const App = () => {
-  return <div>App</div>;
-}
-
-export default App;
+export default withBookstoreService()(App);
