@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import "./shop-header.css";
 
 const ShopHeader = ({ cartItems, orderTotal }) => {
-  const numItems = cartItems.reduce((acc, {count}) => acc + count, 0);
+  const numItems = cartItems.reduce((acc, { count }) => acc + count, 0);
   return (
     <header className="row shop-header">
       <Link className="logo text-dark" to="/">
@@ -19,8 +19,6 @@ const ShopHeader = ({ cartItems, orderTotal }) => {
   );
 };
 
-const mapStateToProps = ({cartItems, orderTotal}) => ({
-  cartItems, orderTotal
-})
+const mapStateToProps = ({ shoppingCart }) => shoppingCart;
 
 export default connect(mapStateToProps)(ShopHeader);

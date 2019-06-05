@@ -1,15 +1,16 @@
 const compose = (...funcs) => component =>
   funcs.reduceRight((acc, f) => f(acc), component);
 
-const updateState = (bookId, state, countToAdd) => {
-  const { books, cartItems, orderTotal } = state;
+const updateCart = (bookId, state, countToAdd) => {
+  const { shoppingCart, bookList } = state;
+  const { books } = bookList;
+  const { cartItems, orderTotal } = shoppingCart;
   const book = books.find(({ id }) => id === bookId);
   const itemIndex = cartItems.findIndex(({ id }) => id === bookId);
   const item = cartItems[itemIndex];
   const newItem = updateCartItem(book, item, countToAdd);
 
   return {
-    ...state,
     cartItems: updateItems(cartItems, newItem, itemIndex),
     orderTotal: orderTotal + book.price * countToAdd
   };
@@ -52,4 +53,4 @@ const updateCartItem = (book, item = {}, countToAdd) => {
   };
 };
 
-export { compose, updateState };
+export { compose, updateCart };

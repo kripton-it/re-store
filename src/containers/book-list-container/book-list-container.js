@@ -16,6 +16,7 @@ class BookListContainer extends Component {
 
   render() {
     const { books, isLoading, error, onAdd } = this.props;
+    console.log(isLoading);
 
     if (isLoading) return <Spinner />;
 
@@ -25,9 +26,7 @@ class BookListContainer extends Component {
   }
 }
 
-const mapStateToProps = ({ books, isLoading, error }) => {
-  return { books, isLoading, error };
-};
+const mapStateToProps = ({ bookList }) => bookList;
 
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
