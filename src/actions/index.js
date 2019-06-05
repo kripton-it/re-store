@@ -1,21 +1,32 @@
-const booksLoaded = (newBooks) => {
+const booksLoaded = newBooks => {
   return {
-    type: 'BOOKS_LOADED',
-    payload: newBooks,
+    type: "FETCH_BOOKS_SUCCESS",
+    payload: newBooks
   };
-}
+};
 
 const booksRequested = () => {
   return {
-    type: 'BOOKS_REQUESTED',
+    type: "FETCH_BOOKS_REQUEST"
   };
-}
+};
 
-const booksError = (error) => {
+const booksError = error => {
   return {
-    type: 'BOOKS_ERROR',
-    payload: error,
+    type: "FETCH_BOOKS_ERROR",
+    payload: error
   };
-}
+};
 
-export { booksLoaded, booksRequested, booksError };
+// вынесли логbre работы с данными из компонента
+// объединяет в себе 3 action creator, и теперь их не надо экспортировать
+const fetchBooks = (bookstoreService, dispatch) => () => {
+  const { getBooks } = bookstoreService;
+  dispatch(booksRequested());
+
+  getBooks()
+    .then(data => dispatch(booksLoaded(data)))
+    .catch(error => dispatch(booksError(error)));
+};
+
+export { fetchBooks };
