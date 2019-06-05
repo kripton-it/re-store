@@ -8,26 +8,31 @@ import { booksLoaded } from "../../actions";
 import { compose } from "../../utils";
 
 import BookListItem from "../book-list-item";
+import Spinner from "../spinner";
 
 class BookList extends Component {
   componentDidMount() {
     const { bookstoreService, booksLoaded } = this.props;
     const { getBooks } = bookstoreService;
-    const data = getBooks();
-    setTimeout(() => booksLoaded(data), 1000);
+    getBooks().then(booksLoaded);
   }
 
   render() {
-    const { books } = this.props;
+    const { books, isLoading } = this.props;
+
+    if (isLoading) return <Spinner />;
+
     const bookList = books.map(book => (
-      <BookListItem key={book.id} book={book} />
+      <li>
+        <BookListItem key={book.id} book={book} />
+      </li>
     ));
     return <ul className="book-list">{bookList}</ul>;
   }
 }
 
-const mapStateToProps = ({ books }) => {
-  return { books };
+const mapStateToProps = ({ books, isLoading }) => {
+  return { books, isLoading };
 };
 
 const mapDispatchToProps = { booksLoaded };
