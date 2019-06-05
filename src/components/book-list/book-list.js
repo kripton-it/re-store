@@ -14,7 +14,7 @@ class BookList extends Component {
     const { bookstoreService, booksLoaded } = this.props;
     const { getBooks } = bookstoreService;
     const data = getBooks();
-    setTimeout(() => booksLoaded(data), 5000);
+    setTimeout(() => booksLoaded(data), 1000);
   }
 
   render() {
@@ -22,7 +22,7 @@ class BookList extends Component {
     const bookList = books.map(book => (
       <BookListItem key={book.id} book={book} />
     ));
-    return <ul>{bookList}</ul>;
+    return <ul className="book-list">{bookList}</ul>;
   }
 }
 
