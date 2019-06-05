@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 import "./book-list.css";
@@ -31,30 +30,6 @@ const mapStateToProps = ({ books }) => {
   return { books };
 };
 
-// первый способ - диспатчить action вручную
-/*const mapDispatchToProps = dispatch => {
-  return {
-    booksLoaded: newBooks => {
-      dispatch({
-        type: "BOOKS_LOADED",
-        payload: newBooks
-      });
-    }
-  };
-};*/
-
-// второй способ - диспатчить action с помощью action creator
-/*const mapDispatchToProps = dispatch => {
-  return {
-    booksLoaded: newBooks => dispatch(booksLoaded(newBooks))
-  };
-};*/
-
-// третий способ - диспатчить action с помощью Redux.bindActionCreators
-/*const mapDispatchToProps = dispatch =>
-  bindActionCreators({ booksLoaded }, dispatch);*/
-
-// 4-ый способ - в качестве mapDispatchToProps передать в connect объект с action creators
 const mapDispatchToProps = { booksLoaded };
 
 export default compose(
