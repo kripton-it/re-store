@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import "./shopping-cart-table.css";
 
+import { bookAddedToCart, bookDeletedFromCart, allBooksDeletedFromCart } from "../../actions";
+
 const ShoppingCartTable = ({
   items,
   total,
@@ -12,13 +14,18 @@ const ShoppingCartTable = ({
   const renderRow = (item, index) => {
     const { id, title, count, total } = item;
 
+    if (count === 0) {
+      onDelete(id);
+      return;
+    }
+
     return (
       <tr key={id}>
-        <td>{index + 1}</td>
-        <td>{title}</td>
-        <td>{count}</td>
-        <td>${total}</td>
-        <td>
+        <td className="id">{index + 1}</td>
+        <td className="title">{title}</td>
+        <td className="count">{count}</td>
+        <td className="price">${total}</td>
+        <td className="action">
           <button
             className="btn btn-outline-danger btn-sm float-right"
             onClick={() => onDelete(id)}
@@ -47,11 +54,11 @@ const ShoppingCartTable = ({
       <table className="table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Item</th>
-            <th>Count</th>
-            <th>Price</th>
-            <th>Action</th>
+            <th className="id">#</th>
+            <th className="title">Item</th>
+            <th className="count">Count</th>
+            <th className="price">Price</th>
+            <th className="action">Action</th>
           </tr>
         </thead>
 
@@ -70,12 +77,15 @@ const mapStateToProps = ({ cartItems, orderTotal }) => {
   };
 };
 
-const mapDispatchToProps = () => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onDelete: (id) => console.log(`${id} deleted`),
-    onDecrease: (id) => console.log(`${id} decreased`),
-    onIncrease: (id) => console.log(`${id} increased`),
-  }
-}
+    onDelete: id => dispatch(allBooksDeletedFromCart(id)),
+    onDecrease: id => dispatch(bookDeletedFromCart(id)),
+    onIncrease: id => dispatch(bookAddedToCart(id))
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCartTable);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShoppingCartTable);

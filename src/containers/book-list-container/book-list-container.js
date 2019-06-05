@@ -32,7 +32,7 @@ const mapStateToProps = ({ books, isLoading, error }) => {
 const mapDispatchToProps = (dispatch, { bookstoreService }) => {
   return {
     fetchBooks: fetchBooks(bookstoreService, dispatch),
-    onAdd: id => dispatch(bookAddedToCart(id))
+    onAdd: id => dispatch(bookAddedToCart(id)),
   };
 };
 
@@ -43,3 +43,4 @@ export default compose(
     mapDispatchToProps
   )
 )(BookListContainer);
+
