@@ -1,3 +1,4 @@
+// 1 работа с сервисом
 const booksLoaded = newBooks => {
   return {
     type: "FETCH_BOOKS_SUCCESS",
@@ -18,7 +19,7 @@ const booksError = error => {
   };
 };
 
-// вынесли логbre работы с данными из компонента
+// вынесли логику работы с данными из компонента
 // объединяет в себе 3 action creator, и теперь их не надо экспортировать
 const fetchBooks = (bookstoreService, dispatch) => () => {
   const { getBooks } = bookstoreService;
@@ -29,4 +30,12 @@ const fetchBooks = (bookstoreService, dispatch) => () => {
     .catch(error => dispatch(booksError(error)));
 };
 
-export { fetchBooks };
+// 2 - работа с корзиной
+const bookAddedToCart = (bookId) => {
+  return {
+    type: "BOOK_ADDED_TO_CART",
+    payload: bookId
+  };
+};
+
+export { fetchBooks, bookAddedToCart };
