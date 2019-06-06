@@ -19,9 +19,8 @@ const booksError = error => {
   };
 };
 
-// вынесли логику работы с данными из компонента
-// объединяет в себе 3 action creator, и теперь их не надо экспортировать
-const fetchBooks = (bookstoreService, dispatch) => () => {
+// старая версия, для работы без thunkMiddleware
+const fetchBooksOld = (bookstoreService, dispatch) => () => {
   const { getBooks } = bookstoreService;
   dispatch(booksRequested());
 
@@ -29,6 +28,16 @@ const fetchBooks = (bookstoreService, dispatch) => () => {
     .then(data => dispatch(booksLoaded(data)))
     .catch(error => dispatch(booksError(error)));
 };
+
+// новая версия, для работы с thunkMiddleware
+const fetchBooks = bookstoreService => () => (dispatch) => {
+  const { getBooks } = bookstoreService;
+  dispatch(booksRequested());
+
+  getBooks()
+    .then(data => dispatch(booksLoaded(data)))
+    .catch(error => dispatch(booksError(error)));
+}
 
 // 2 - работа с корзиной
 const bookAddedToCart = (bookId) => {

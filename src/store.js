@@ -32,7 +32,19 @@ const myAction = dispatch => {
   );
 };
 
-store.dispatch(myAction);
+// функция, создающая action типа myAction с задержкой:
+const delayedActionCreator = (delay) => dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: "DELAYED_ACTION"
+      }),
+    delay
+  );
+};
+
+// store.dispatch(myAction);
+store.dispatch(delayedActionCreator(5000));
 
 //store.dispatch("HELLO_WORLD");
 
