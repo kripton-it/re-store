@@ -1,5 +1,21 @@
-import { createStore, compose } from "redux";
+import { createStore, compose, applyMiddleware } from "redux";
 import reducer from "./reducers";
+
+// реализация того же эффекта с помощью middleware.
+// middleware-функции модифицируют внутренний механизм работы dispatch.
+// next - это следующий dispatch в цепочке.
+// доступ возможен не ко всему store, а только к store.getState() и store.dispatch()
+const logMiddleware = ({ getState }) => next => action => {
+  console.log(action.type, getState());
+  return next(action);
+};
+
+const stringMiddleware = () => next => action => {
+  if (typeof action === "string") {
+    return next({ type: action });
+  }
+  return next(action);
+};
 
 /*
 реализация того же эффекта с помощью store enhancer
@@ -9,7 +25,7 @@ import reducer from "./reducers";
 - можно использовать композицию нескольких enhancer-ов
 */
 
-const stringEnhancer = createStore => (...args) => {
+/*const stringEnhancer = createStore => (...args) => {
   const store = createStore(...args);
 
   const originalDispatch = store.dispatch;
@@ -37,7 +53,7 @@ const logEnhancer = createStore => (...args) => {
   return store;
 };
 
-const store = createStore(reducer, compose(stringEnhancer, logEnhancer));
+const store = createStore(reducer, compose(stringEnhancer, logEnhancer));*/
 
 /* пример манкипатчинга - так делать крайне нежелательно
 
@@ -49,6 +65,13 @@ store.dispatch = (action) => {
   }
   return originalDispatch(action);
 }*/
+
+// функция applyMiddleware, по сути, store enhancer
+// встроен в redux
+const store = createStore(
+  reducer,
+  applyMiddleware(stringMiddleware, logMiddleware)
+);
 
 store.dispatch("HELLO_WORLD");
 
