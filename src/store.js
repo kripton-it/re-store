@@ -1,10 +1,7 @@
-import { createStore, compose, applyMiddleware } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import thunkMiddleware from "redux-thunk";  // исходный код - 14 строк
 import reducer from "./reducers";
 
-// реализация того же эффекта с помощью middleware.
-// middleware-функции модифицируют внутренний механизм работы dispatch.
-// next - это следующий dispatch в цепочке.
-// доступ возможен не ко всему store, а только к store.getState() и store.dispatch()
 const logMiddleware = ({ getState }) => next => action => {
   console.log(action.type, getState());
   return next(action);
@@ -17,62 +14,26 @@ const stringMiddleware = () => next => action => {
   return next(action);
 };
 
-/*
-реализация того же эффекта с помощью store enhancer
-на первый взгляд - то же самое, но:
-- удобнее тестировать
-- можно выделить в отдельный модуль
-- можно использовать композицию нескольких enhancer-ов
-*/
-
-/*const stringEnhancer = createStore => (...args) => {
-  const store = createStore(...args);
-
-  const originalDispatch = store.dispatch;
-
-  store.dispatch = action => {
-    if (typeof action === "string") {
-      return originalDispatch({ type: action });
-    }
-    return originalDispatch(action);
-  };
-
-  return store;
-};
-
-const logEnhancer = createStore => (...args) => {
-  const store = createStore(...args);
-
-  const originalDispatch = store.dispatch;
-
-  store.dispatch = action => {
-    console.log(action.type);
-    return originalDispatch(action);
-  };
-
-  return store;
-};
-
-const store = createStore(reducer, compose(stringEnhancer, logEnhancer));*/
-
-/* пример манкипатчинга - так делать крайне нежелательно
-
-const originalDispatch = store.dispatch;
-
-store.dispatch = (action) => {
-  if (typeof action === 'string') {
-    return originalDispatch({type: action});
-  }
-  return originalDispatch(action);
-}*/
-
-// функция applyMiddleware, по сути, store enhancer
-// встроен в redux
+// thunkMiddleware используется для того, чтобы была возможность передавать
+// в dispatch не только action, но и функцию (например, myAction ниже)
+// удобно для описания асинхронных процессов в виде action
 const store = createStore(
   reducer,
-  applyMiddleware(stringMiddleware, logMiddleware)
+  applyMiddleware(thunkMiddleware, stringMiddleware, logMiddleware)
 );
 
-store.dispatch("HELLO_WORLD");
+const myAction = dispatch => {
+  setTimeout(
+    () =>
+      dispatch({
+        type: "DELAYED_ACTION"
+      }),
+    2000
+  );
+};
+
+store.dispatch(myAction);
+
+//store.dispatch("HELLO_WORLD");
 
 export default store;
