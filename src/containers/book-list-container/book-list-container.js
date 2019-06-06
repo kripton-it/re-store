@@ -16,7 +16,6 @@ class BookListContainer extends Component {
 
   render() {
     const { books, isLoading, error, onAdd } = this.props;
-    console.log(isLoading);
 
     if (isLoading) return <Spinner />;
 
